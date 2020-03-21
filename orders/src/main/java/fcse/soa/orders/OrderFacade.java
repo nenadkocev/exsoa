@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderFacade {
 
     private final ProductService productService;
     private final UserService userService;

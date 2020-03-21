@@ -9,8 +9,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +27,9 @@ public class UserService {
                     fromHttpUrl(URL)
                     .queryParam("user", userName)
                     .build();
-            restTemplate.getForObject(url.toUri(), UserDbEntity.class);
-            return restTemplate.getForObject(new URI(URL), UserDbEntity.class);
+            return restTemplate.getForObject(url.toUri(), UserDbEntity.class);
         } catch (Throwable t) {
-            log.error("Cannot found user with username: {}. Thrown exception", userName, t);
+            log.error("Cannot find user with username: {}. Thrown exception", userName, t);
         }
         return null;
     }

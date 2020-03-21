@@ -6,6 +6,7 @@ import fcse.soa.users.persistence.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @Service
@@ -17,5 +18,13 @@ public class UserService {
     public UserDbEntity getUserByUsername(String username) {
         Optional<UserDbEntity> user = userRepository.findByUsername(username);
         return user.orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    @PostConstruct
+    private void bootstrapDb() {
+        var user = new UserDbEntity();
+        user.setUsername("nkocev");
+        user.setBalance(500L);
+        userRepository.save(user);
     }
 }
