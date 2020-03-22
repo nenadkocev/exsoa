@@ -1,4 +1,4 @@
-package fcse.soa.common;
+package fcse.soa.users;
 
 public class ResourceNotFoundException extends RuntimeException {
 

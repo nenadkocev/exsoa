@@ -1,5 +1,0 @@
-soa:
-  endpoints:
-    ordesrUrl: http://localhost:8080
-    productsUrl: http://localhost:8090
-    usersUrl: http://localhost:9090

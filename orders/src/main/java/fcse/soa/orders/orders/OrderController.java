@@ -1,6 +1,7 @@
-package fcse.soa.orders;
+package fcse.soa.orders.orders;
 
-import fcse.soa.common.ProductsOrderResponse;
+import fcse.soa.orders.orders.model.CheckoutRequest;
+import fcse.soa.orders.orders.model.ProductsOrderResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

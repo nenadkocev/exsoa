@@ -1,4 +1,4 @@
-package fcse.soa.common;
+package fcse.soa.orders.orders;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,8 +12,6 @@ import org.springframework.context.annotation.Configuration;
 public class EndpointsConfigurationProperties {
 
     private String ordesrUrl;
-
-    private String productsUrl;
 
     private String usersUrl;
 }

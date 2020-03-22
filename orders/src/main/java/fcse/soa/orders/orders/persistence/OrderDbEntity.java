@@ -1,6 +1,8 @@
-package fcse.soa.orders.persistence;
+package fcse.soa.orders.orders.persistence;
 
-import fcse.soa.products.persistence.ProductDbEntity;
+import fcse.soa.orders.products.persistence.ProductDbEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,6 +17,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
+@Getter
+@Setter
 public class OrderDbEntity {
 
     @Id
@@ -24,7 +28,7 @@ public class OrderDbEntity {
     @Column(unique = true)
     private String uuid;
 
-    private String userId;
+    private Long userId;
 
     @ManyToMany(cascade = {
             CascadeType.PERSIST,

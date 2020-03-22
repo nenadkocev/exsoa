@@ -1,6 +1,5 @@
-package fcse.soa.orders;
+package fcse.soa.orders.orders.model;
 
-import fcse.soa.common.ProductItem;
 import lombok.Data;
 
 import java.util.List;

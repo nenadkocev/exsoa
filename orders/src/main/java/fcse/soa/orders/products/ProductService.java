@@ -1,15 +1,16 @@
-package fcse.soa.products;
+package fcse.soa.orders.products;
 
-import fcse.soa.common.ProductItem;
-import fcse.soa.common.ProductsOrderRequest;
-import fcse.soa.common.ProductsOrderResponse;
-import fcse.soa.products.persistence.ProductDbEntity;
-import fcse.soa.products.persistence.ProductRepository;
+import fcse.soa.orders.orders.model.ProductItem;
+import fcse.soa.orders.orders.model.ProductsOrderRequest;
+import fcse.soa.orders.orders.model.ProductsOrderResponse;
+import fcse.soa.orders.products.persistence.ProductDbEntity;
+import fcse.soa.orders.products.persistence.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
@@ -20,13 +21,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
-    ProductsOrderResponse handleProductsOrderRequest(ProductsOrderRequest request) {
+    public ProductsOrderResponse handleProductsOrderRequest(ProductsOrderRequest request) {
         ProductsOrderResponse response = new ProductsOrderResponse();
-        response.setOrderId(request.getOrderId());
 
-        List<ProductDbEntity> products = getProductsByName(request.getProductItems());
+        Set<ProductDbEntity> products = getProductsByName(request.getProductItems());
 
         AtomicLong totalPrice = new AtomicLong();
+
         request.getProductItems().forEach(productItem -> {
             ProductDbEntity productDbEntity = products.stream()
                     .filter(p -> p.getName().equals(productItem.getProductName()))
@@ -45,13 +46,14 @@ public class ProductService {
         if(response.getErrors().size() == 0) {
             productRepository.saveAll(products);
         }
+        response.setProducts(products);
         return response;
     }
 
-    private List<ProductDbEntity> getProductsByName(List<ProductItem> productItems) {
+    private Set<ProductDbEntity> getProductsByName(List<ProductItem> productItems) {
         return productItems.stream()
                 .map(item -> productRepository.findByName(item.getProductName()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     @PostConstruct
