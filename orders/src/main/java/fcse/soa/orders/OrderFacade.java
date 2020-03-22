@@ -2,7 +2,6 @@ package fcse.soa.orders;
 
 import fcse.soa.common.ProductsOrderRequest;
 import fcse.soa.common.ProductsOrderResponse;
-import fcse.soa.orders.model.CheckoutRequest;
 import fcse.soa.users.persistence.UserDbEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,11 @@ public class OrderFacade {
                 .productItems(checkoutDto.getProductItems())
                 .build();
 
-        return productService.handleProductsOrderRequest(request);
+        ProductsOrderResponse response = productService.handleProductsOrderRequest(request);
+        if(response.getErrors().size() == 0) {
+            userService.updateUsersBalance(user.getUsername(), user.getBalance() - response.getTotalPrice());
+        }
+
+        return response;
     }
 }

@@ -24,8 +24,7 @@ public class ProductService {
         ProductsOrderResponse response = new ProductsOrderResponse();
         response.setOrderId(request.getOrderId());
 
-        List<ProductDbEntity> products = productRepository.findAllByName((String[]) request.getProductItems().stream()
-                .map(ProductItem::getProductName).toArray());
+        List<ProductDbEntity> products = getProductsByName(request.getProductItems());
 
         AtomicLong totalPrice = new AtomicLong();
         request.getProductItems().forEach(productItem -> {
@@ -40,16 +39,25 @@ public class ProductService {
         });
 
         response.setTotalPrice(totalPrice.get());
-        if(response.getTotalPrice() < request.getUserBalance() && response.getErrors().size() == 0) {
+        if(response.getTotalPrice() > request.getUserBalance()) {
+            response.getErrors().add("Not enough funds...");
+        }
+        if(response.getErrors().size() == 0) {
             productRepository.saveAll(products);
         }
         return response;
     }
 
+    private List<ProductDbEntity> getProductsByName(List<ProductItem> productItems) {
+        return productItems.stream()
+                .map(item -> productRepository.findByName(item.getProductName()))
+                .collect(Collectors.toList());
+    }
+
     @PostConstruct
     private void populateTable() {
         var product1 = new ProductDbEntity();
-        product1.setName("Cola-cola");
+        product1.setName("Coca-cola");
         product1.setPrice(65L);
         product1.setQuantity(120L);
 

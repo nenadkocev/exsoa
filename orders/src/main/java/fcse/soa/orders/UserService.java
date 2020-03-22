@@ -33,4 +33,8 @@ public class UserService {
         }
         return null;
     }
+
+    public void updateUsersBalance(String user, long newBalance) {
+
+    }
 }

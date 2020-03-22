@@ -13,13 +13,13 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class ProductService {
 
-    public static final String ORDER = "/order";
+    public static final String ORDER = "/product/order";
 
     private final EndpointsConfigurationProperties endpoints;
     private final RestTemplate restTemplate;
 
     public ProductsOrderResponse handleProductsOrderRequest(ProductsOrderRequest request) {
-        String url = endpoints.getOrdesrUrl() + ORDER;
+        String url = endpoints.getProductsUrl() + ORDER;
         ResponseEntity<ProductsOrderResponse> response = restTemplate.postForEntity(url, request, ProductsOrderResponse.class);
         return response.getBody();
     }

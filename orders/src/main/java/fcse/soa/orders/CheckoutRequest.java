@@ -1,4 +1,4 @@
-package fcse.soa.orders.model;
+package fcse.soa.orders;
 
 import fcse.soa.common.ProductItem;
 import lombok.Data;
