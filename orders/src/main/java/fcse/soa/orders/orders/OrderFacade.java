@@ -68,8 +68,9 @@ public class OrderFacade {
         }
     }
 
+    @SneakyThrows
     private UserDbEntity fallbackFromService(Throwable throwable) {
-        log.error("Fallback method triggered by green circuit breaker", throwable);
-        return null;
+        log.error("Fallback method triggered by green circuit breaker");
+        throw throwable;
     }
 }

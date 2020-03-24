@@ -30,9 +30,6 @@ public class OrderDbEntity {
 
     private Long userId;
 
-    @ManyToMany(cascade = {
-            CascadeType.PERSIST,
-            CascadeType.MERGE
-    })
+    @ManyToMany(cascade = CascadeType.MERGE)
     private Set<ProductDbEntity> products = new HashSet<>();
 }

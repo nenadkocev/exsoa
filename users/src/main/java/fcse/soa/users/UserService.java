@@ -26,8 +26,8 @@ public class UserService {
     @PostConstruct
     private void bootstrapDb() {
         var user = new UserDbEntity();
-        user.setUsername("nkocev");
-        user.setBalance(500L);
+        user.setUsername("user");
+        user.setBalance(1000L);
         userRepository.save(user);
     }
 
