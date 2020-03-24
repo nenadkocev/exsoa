@@ -5,10 +5,14 @@ import fcse.soa.orders.orders.model.ProductsOrderRequest;
 import fcse.soa.orders.orders.model.ProductsOrderResponse;
 import fcse.soa.orders.products.persistence.ProductDbEntity;
 import fcse.soa.orders.products.persistence.ProductRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
@@ -16,10 +20,17 @@ import java.util.stream.Collectors;
 
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CircuitBreaker blue;
+
+
+    public ProductService(ProductRepository productRepository, CircuitBreakerFactory cbf) {
+        this.productRepository = productRepository;
+        this.blue = cbf.create("blue");
+    }
 
     public ProductsOrderResponse handleProductsOrderRequest(ProductsOrderRequest request) {
         ProductsOrderResponse response = new ProductsOrderResponse();
@@ -51,9 +62,27 @@ public class ProductService {
     }
 
     private Set<ProductDbEntity> getProductsByName(List<ProductItem> productItems) {
-        return productItems.stream()
-                .map(item -> productRepository.findByName(item.getProductName()))
-                .collect(Collectors.toSet());
+        return blue.run(() -> productItems.stream()
+                .map(item -> {
+                    succeedOrNot(item.getProductName());
+                    return productRepository.findByName(item.getProductName());
+                })
+                .collect(Collectors.toSet()), this::fallback);
+    }
+
+    @SneakyThrows
+    private void succeedOrNot(String productName) {
+        if(productName.equals("exception")) {
+            throw new RuntimeException("Exception from product db");
+        }
+        if(productName.equals("slowCall")) {
+            Thread.sleep(5000);
+        }
+    }
+
+    private Set<ProductDbEntity> fallback(Throwable throwable) {
+        log.error("Fallback method while triggered by blue circuit breaker", throwable);
+        return new HashSet<>();
     }
 
     @PostConstruct
