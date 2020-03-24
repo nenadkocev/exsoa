@@ -24,8 +24,10 @@ services:
     restart: unless-stopped
     depends_on:
       - postgres
+      - usersapp
     links:
       - postgres
+      - usersapp
   usersapp:
     image: users:latest
     network_mode: bridge
