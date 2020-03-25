@@ -1,10 +1,7 @@
 ### Docker setup
 1. Build the parent module - it will generate executable jar for orders and basic jar for users
-2. Add spring-boot-maven-plugin to users/pom.xml and build it - it will generate executable jar for users
-3. Create image for orders service. Run [/orders]$ docker build -t orders .      
-4. Create image for users service. Run [/users]$ docker build -t users .        
-5. Create image for users and products databases. Run [/~]$ docker build -t postgres .         
-6. Run [/~]$ docker-compose up                  
+2. Add spring-boot-maven-plugin to users/pom.xml and build it - it will generate executable jar for users     
+3. Run [/~]$ docker-compose up                  
 
 ### Intro
 
