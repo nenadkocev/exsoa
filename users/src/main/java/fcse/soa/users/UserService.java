@@ -55,8 +55,9 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @SneakyThrows
     public UserDbEntity fallback(Throwable t) {
-        log.error("Failed to get user from db ", t);
-        return null;
+        log.error("Failed to get user from db ");
+        throw t;
     }
 }

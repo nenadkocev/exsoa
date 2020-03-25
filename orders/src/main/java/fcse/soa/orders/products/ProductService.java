@@ -80,9 +80,10 @@ public class ProductService {
         }
     }
 
+    @SneakyThrows
     private Set<ProductDbEntity> fallback(Throwable throwable) {
-        log.error("Fallback method while triggered by blue circuit breaker", throwable);
-        return new HashSet<>();
+        log.error("Fallback method while triggered by blue circuit breaker");
+        throw throwable;
     }
 
     @PostConstruct

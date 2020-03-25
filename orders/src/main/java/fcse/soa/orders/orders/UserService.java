@@ -30,9 +30,9 @@ public class UserService {
                     .build();
             return restTemplate.getForObject(url.toUri(), UserDbEntity.class);
         } catch (Throwable t) {
-            log.error("Cannot find user with username: {}. Thrown exception", user, t);
+            log.error("Cannot find user with username: {}. Thrown exception", user);
+            throw t;
         }
-        return null;
     }
 
     public void updateUsersBalance(String user, long newBalance) {
