@@ -1,7 +1,7 @@
 version: "3"
 services:
   postgres:
-    image: postgres:latest
+    build: .
     network_mode: bridge
     container_name: postgres
     expose:
@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
   # APPS****************************************
   ordersapp:
-    image: orders:latest
+    build: ./orders
     network_mode: bridge
     container_name: ordersapp
     expose:
@@ -29,7 +29,7 @@ services:
       - postgres
       - usersapp
   usersapp:
-    image: users:latest
+    build: ./users
     network_mode: bridge
     container_name: usersapp
     expose:
